@@ -1,9 +1,11 @@
 
 const clients = [];
 const messages = [];
-const webSocket = require ('ws')
+const WebSocket = require ('ws')
+
+
 const wsConnection = (server) => {
-  const wss = WebSocket.Server({ server });
+  const wss = new WebSocket.Server({ server });
 
   wss.on("connection", (ws) => {
     

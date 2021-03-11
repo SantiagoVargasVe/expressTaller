@@ -1,26 +1,31 @@
 
-const clients = [];
-const messages = [];
+const clients = []
+const messages = []
+const jsonMessages= []
 const WebSocket = require ('ws')
+const fs = require('fs')
 
 
 const wsConnection = (server) => {
-  const wss = new WebSocket.Server({ server });
+  const wss = new WebSocket.Server({ server })
 
   wss.on("connection", (ws) => {
     
-    clients.push(ws);
-    sendMessages();
+    clients.push(ws)
+    sendMessages() 
 
     ws.on("message", (message) => {
-      messages.push(message);
-      sendMessages();
-    });
-  });
+      act = JSON.parse(message)
+      jsonMessages.push(act)
+      messages.push(message)
+      sendMessages()
+    })
+  })
 
   const sendMessages = () => {
-    clients.forEach((client) => client.send(JSON.stringify(messages)));
-  };
-};
+    fs.writeFileSync('messages.json', JSON.stringify(jsonMessages))
+    clients.forEach((client) => client.send(JSON.stringify(messages)))
+  }
+}
 
-exports.wsConnection = wsConnection;
+exports.wsConnection = wsConnection

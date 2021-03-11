@@ -4,14 +4,20 @@ const fs = require('fs')
 const WebSocket = require("ws");
 const Joi = require('joi');
 const ws = new WebSocket("ws://localhost:3000");
-
+const Message = require('../models/message')
 router.get('/', function(req, res, next) {
     res.send(`<a href= 'https://www.youtube.com/watch?v=dQw4w9WgXcQ'> xd <a>`)
   })
-
+//Ya lo mensajes se agreagan  a la base de datos, aun usando la API
 router.get('/messages', (req,res,next) =>{
+    Message.findAll().then((db)=>{
+        console.log("Base de datos")
+        console.log(db)
+    })
     let jsonData = fs.readFileSync("./messages.json")
     let sendData = JSON.parse(jsondata)
+
+    
     res.send(sendData)
 })
 
@@ -33,6 +39,7 @@ router.get('/messages/:id', (req,res,next)=>{
 })
 
 router.post('/messages/', (req,res,next)=>{
+    //Ya lo mensajes se agreagan  a la base de datos, aun usando la API
     let body = req.body
     let jsonMessages = fs.readFileSync('./messages.json')
     let messages = JSON.parse(jsonMessages)
